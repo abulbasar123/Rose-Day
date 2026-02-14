@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Under The Same Stars ✨</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(to bottom, #0a0e27 0%, #1a1438 50%, #2d1b4e 100%);
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Starry Background */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes shootingStar {
+            0% {
+                transform: translate(0, 0) rotate(-45deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-300px, 300px) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+
+        .shooting-star {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: white;
+            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+            z-index: 2;
+            animation: shootingStar 1.5s ease-out;
+        }
+
+        .shooting-star::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(to right, white, transparent);
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff6b9d, #ffc371, #ff6b9d);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            color: #e0d5ff;
+            margin-bottom: 40px;
+        }
+
+        /* Music Toggle */
+        .music-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .music-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .music-toggle span {
+            font-size: 1.5em;
+        }
+
+        /* Countdown */
+        .countdown {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px 50px;
+            margin: 40px 0;
+            box-shadow: 0 8px 32px rgba(255, 107, 157, 0.2);
+        }
+
+        .countdown h3 {
+            color: #ffc371;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .countdown-timer {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .time-unit {
+            text-align: center;
+        }
+
+        .time-unit .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ff6b9d;
+        }
+
+        .time-unit .label {
+            font-size: 0.9em;
+            color: #d0b3ff;
+        }
+
+        /* Floating Hearts */
+        .floating-heart {
+            position: fixed;
+            font-size: 2em;
+            animation: floatUp 6s ease-in infinite;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Timeline Section */
+        .timeline {
+            position: relative;
+            padding: 100px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, #ff6b9d, transparent);
+        }
+
+        .timeline-item {
+            margin-bottom: 100px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: auto;
+            text-align: left;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-right: auto;
+            text-align: right;
+        }
+
+        .timeline-content {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            width: 45%;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(255, 107, 157, 0.15);
+        }
+
+        .timeline-date {
+            color: #ffc371;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .timeline-title {
+            font-size: 1em;
+            margin-bottom: 15px;
+            color: #ff6b9d;
+        }
+
+        .timeline-description {
+            color: #e0d5ff;
+            line-height: 1.8;
+            font-size: 1em;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 30px;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: #ff6b9d;
+            border: 4px solid #0a0e27;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #ff6b9d;
+            z-index: 10;
+        }
+
+        /* Photo Gallery */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .photo-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(255, 107, 157, 0.2);
+            transition: transform 0.3s ease;
+            aspect-ratio: 1;
+        }
+
+        .photo-item:hover {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff6b9d, #ffc371);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+        }
+
+        /* Things I Miss Section */
+        .miss-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 30px;
+            padding: 60px 40px;
+            margin: 80px 0;
+            text-align: center;
+        }
+
+        .miss-section h2 {
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            color: #ff6b9d;
+        }
+
+        .miss-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .miss-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .miss-item:hover {
+            background: rgba(255, 107, 157, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .miss-item .icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .miss-item .text {
+            color: #e0d5ff;
+            font-size: 1.1em;
+        }
+
+        /* Future Section */
+        .future-section {
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .future-section h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #ffc371;
+        }
+
+        .future-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .future-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px 30px;
+            transition: all 0.3s ease;
+        }
+
+        .future-card:hover {
+            background: rgba(255, 107, 157, 0.1);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(255, 107, 157, 0.3);
+        }
+
+        .future-card .icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .future-card h3 {
+            color: #ff6b9d;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .future-card p {
+            color: #e0d5ff;
+            line-height: 1.8;
+        }
+
+        /* Final Message */
+        .final-message {
+            text-align: center;
+            padding: 100px 20px;
+            margin-top: 80px;
+        }
+
+        .final-message h2 {
+            font-size: 3em;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #ff6b9d, #ffc371);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        .final-message p {
+            font-size: 1.3em;
+            color: #e0d5ff;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 2;
+        }
+
+        .heart-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b9d, #ffc371);
+            color: white;
+            padding: 20px 50px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+        }
+
+        .heart-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(255, 107, 157, 0.6);
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        .scroll-indicator span {
+            font-size: 2em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-content {
+                width: calc(100% - 60px);
+                margin-left: 60px !important;
+                text-align: left !important;
+            }
+
+            .timeline-dot {
+                left: 20px;
+            }
+
+            .countdown-timer {
+                gap: 15px;
+            }
+
+            .time-unit .number {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Music Toggle -->
+    <div class="music-toggle" onclick="toggleMusic()" title="Toggle Music">
+        <span id="musicIcon">🎵</span>
+    </div>
+
+    <!-- Audio (silent placeholder - you can add your music file) -->
+    <audio id="bgMusic" loop>
+        <source src="tere_liye.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Stars Background -->
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1>Under The Same Stars</h1>
+            <p>Even thousand miles apart, we share the same sky, the same moon, the same dreams...</p>
+            
+            <!-- Countdown -->
+            <div class="countdown">
+                <h3>Days Until We're Together Again</h3>
+                <div class="countdown-timer">
+                    <div class="time-unit">
+                        <div class="number" id="days">00</div>
+                        <div class="label">Days</div>
+                    </div>
+                    <div class="time-unit">
+                        <div class="number" id="hours">00</div>
+                        <div class="label">Hours</div>
+                    </div>
+                    <div class="time-unit">
+                        <div class="number" id="minutes">00</div>
+                        <div class="label">Minutes</div>
+                    </div>
+                    <div class="time-unit">
+                        <div class="number" id="seconds">00</div>
+                        <div class="label">Seconds</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scroll-indicator">
+                <span>↓</span>
+            </div>
+        </div>
+
+        <!-- Timeline Section -->
+        <div class="timeline">
+            <!-- Timeline Item 1 -->
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">The Beginning</div>
+                    <h3 class="timeline-title">Our First Hello</h3>
+                    <p class="timeline-description">
+                        From the moment when I saw you walking toward me with full a face full of uncertainty and yet smiling, I knew this is the end of my searching. Though I wasn't looking for someone, but at that very moment I felt like it was long overdue, and we were destined to meet.There was something special about you. Your laugh, your smile, the way you see the world, it all captivated me. That day, my life changed forever and I don't want my life to go back!
+                    </p>
+                    <div class="photo-gallery">
+                        <div class="photo-item">
+                            <img src="images\photo20.jpeg" alt="Our first hello">
+                        </div>
+                        <div class="photo-item">
+                            <img src="images\photo6.jpeg" alt="Our first hello">
+                        </div>
+                        <div class="photo-item">
+                            <img src="images\photo5.jpeg" alt="Our first hello">
+                        </div>
+                        <div class="photo-item">
+                            <img src="images\photo11.jpeg" alt="Our first hello">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Item 2 -->
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">Forever Memories</div>
+                    <h3 class="timeline-title">Those Unforgettable Days</h3>
+                    <p class="timeline-description">
+                        Remember when we spent the entire day with each other, losing track of time? Every moment felt like a scene I ever dreamt of. You are my peace in this chaotic world, a Wakfit mattress to my sleep, a Calibr8 to my living room, a cool breeze to my seashore.
+                    </p>
+                    <div class="photo-gallery">
+                        <div class="photo-item">
+                            <img src="images\photo9.jpeg" alt="Our first hello">
+                        </div>
+                        <div class="photo-item">
+                            <img src="images\photo10.jpeg" alt="Our first hello">
+                        </div>
+                        <div class="photo-item">
+                            <img src="images\photo3.jpeg" alt="Our first hello">
+                        </div>
+                        <div class="photo-item">
+                            <img src="images\photo23.jpeg" alt="Our first hello">
+                        </div>
+                        <div class="photo-item">
+                            <img src="images\photo14.jpeg" alt="Our first hello">
+                        </div>
+                        <div class="photo-item">
+                            <img src="images\photo16.jpeg" alt="Our first hello">
+                        </div>
+                        <div class="photo-item">
+                            <img src="images\photo18.jpeg" alt="Our first hello">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Item 3 -->
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">Growing Together</div>
+                    <h3 class="timeline-title">Every Adventure With You</h3>
+                    <p class="timeline-description">
+                        My life has become an adventure since the day we met. A beautiful adventure where we share love, laughter, smiles, passions, knowledge, wisdom, doubts, worries, insecurities and many things. There might be some roads that are too bad to walk on, but I promise I would never let go of your hand, and hold it even tighter. All I know is that I have got to finish this adventure with you only.
+                    </p>
+                    <div class="photo-gallery">
+                        <div class="photo-item">
+                            <img src="images\photo2.jpeg" alt="Our first hello">
+                        </div>
+                        <div class="photo-item">
+                            <img src="images\photo15.jpeg" alt="Our first hello">
+                        </div>
+                        <div class="photo-item">
+                            <img src="images\photo1.jpeg" alt="Our first hello">
+                        </div>
+                        <div class="photo-item">
+                            <img src="images\photo12.jpeg" alt="Our first hello">
+                        </div>
+                        <div class="photo-item">
+                            <img src="images\photo4.jpeg" alt="Our first hello">
+                        </div>
+                        <div class="photo-item">
+                            <img src="images\photo17.jpeg" alt="Our first hello">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Things I Miss Section -->
+        <div class="miss-section">
+            <h2>Things I Miss So Much</h2>
+            <p style="color: #e0d5ff; font-size: 1.2em; margin-bottom: 20px;">
+                Every day without you feels incomplete. My heart longs for you with every beat. I miss so much of your...
+            </p>
+            <div class="miss-grid">
+                <div class="miss-item">
+                    <div class="icon">😊</div>
+                    <div class="text">Your beautiful smile that lights up my darkest days, and bring joy to my life 🍁</div>
+                </div>
+                <div class="miss-item">
+                    <div class="icon">😂</div>
+                    <div class="text">Your infectious laugh that makes my heart skip a beat, and make me crack lame jokes to make you laugh even harder and hopefully someday pee 😜😜😜</div>
+                </div>
+                <div class="miss-item">
+                    <div class="icon">🤗</div>
+                    <div class="text">Your warm hugs and cuddles that feel like home ❤️</div>
+                </div>
+                <div class="miss-item">
+                    <div class="icon">💬</div>
+                    <div class="text">Our endless conversations about everything and nothing</div>
+                </div>
+                <div class="miss-item">
+                    <div class="icon">👀</div>
+                    <div class="text">The way you look at me like I'm your whole world</div>
+                </div>
+                <div class="miss-item">
+                    <div class="icon">✋</div>
+                    <div class="text">Holding your hand as we walk through life together 🤝</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Future Section -->
+        <div class="future-section">
+            <h2>Our Future Together</h2>
+            <p style="color: #e0d5ff; font-size: 1.2em; max-width: 700px; margin: 20px auto 60px;">
+                I know we have now entered the phase where distance is inevitable, but what we have is forever. Here's to all the beautiful moments waiting for us...
+            </p>
+            <div class="future-grid">
+                <div class="future-card">
+                    <div class="icon">🌍</div>
+                    <h3>Adventures Await</h3>
+                    <p>Exploring new places together, creating memories in every corner of the world (Paris), hand in hand.</p>
+                </div>
+                <div class="future-card">
+                    <div class="icon">🏡</div>
+                    <h3>Building Our Home</h3>
+                    <p>A cozy space filled with love, laughter, aesthetic vibes, a library and all our favorite things—where we belong together.</p>
+                </div>
+                <div class="future-card">
+                    <div class="icon">💑</div>
+                    <h3>Growing Old Together</h3>
+                    <p>Through every season of life, every challenge and triumph, always side by side.</p>
+                </div>
+                <div class="future-card">
+                    <div class="icon">⭐</div>
+                    <h3>Dreams Coming True</h3>
+                    <p>Supporting each other's dreams, celebrating victories, and turning every wish into reality.</p>
+                </div>
+                <div class="future-card">
+                    <div class="icon">📖</div>
+                    <h3>Our Story Continues</h3>
+                    <p>Every day writing new chapters, filled with love and memories we create together.</p>
+                </div>
+                <div class="future-card">
+                    <div class="icon">💝</div>
+                    <h3>Forever & Always</h3>
+                    <p>Through every sunrise and sunset, my love for you will only grow stronger.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Message -->
+        <div class="final-message">
+            <h2>To Be Continued...</h2>
+            <p>
+                if dreaming is the only way to be with you nowadays then I will never open my eyes. You are not just my valentine, you are my peace, my smile, and my favorite place in this world. Be clingy with me. I don't want space, I want you. Call me just to beathe on the line. Let me feel you in the quiet moments too! I just can't get enough of you.
+            </p>
+            <p>
+                I promise to love you with all the love I have. I promise to spend my time thinking of new ways to bring a smile on your face. I promise to make you feel like most important person in the world. I promise that no matter what, I will always make you feel love, respected, and adored.
+            </p>
+            <p style="font-size: 1.5em; color: #ff6b9d; margin-top: 40px;">
+                I love you more than words can say. ❤️
+            </p>
+            <button class="heart-button" onclick="createShootingStar()">
+                Keep clicking for Shooting Stars and make all your wishes come true 💫
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Create starry background
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Create floating hearts
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            document.body.appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 6000);
+        }
+
+        // Create shooting star
+        function createShootingStar() {
+            const star = document.createElement('div');
+            star.className = 'shooting-star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 50 + '%';
+            document.body.appendChild(star);
+            
+            setTimeout(() => star.remove(), 1500);
+        }
+
+        // Countdown Timer
+        function updateCountdown() {
+            // CUSTOMIZE THIS: Set your reunion date here (YYYY, MM-1, DD)
+            const reunionDate = new Date(2026, 2, 14); // March 14, 2026 (month is 0-indexed)
+            const now = new Date();
+            const difference = reunionDate - now;
+
+            if (difference > 0) {
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            } else {
+                document.querySelector('.countdown h3').textContent = "We're Together! 🎉";
+                document.querySelector('.countdown-timer').innerHTML = '<div style="font-size: 2em; color: #ff6b9d;">❤️</div>';
+            }
+        }
+
+        // Music toggle
+        let musicPlaying = false;
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const icon = document.getElementById('musicIcon');
+            
+            if (musicPlaying) {
+                music.pause();
+                icon.textContent = '🎵';
+                musicPlaying = false;
+            } else {
+                music.play();
+                icon.textContent = '🔇';
+                musicPlaying = true;
+            }
+        }
+
+        // Scroll animation for timeline
+        function checkScroll() {
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            
+            timelineItems.forEach(item => {
+                const itemTop = item.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (itemTop < windowHeight * 0.8) {
+                    item.classList.add('visible');
+                }
+            });
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            createStars();
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+            setInterval(createFloatingHeart, 3000);
+            checkScroll();
+            
+            // Random shooting stars
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    createShootingStar();
+                }
+            }, 5000);
+        });
+
+        window.addEventListener('scroll', checkScroll);
+    </script>
+</body>
+</html>
